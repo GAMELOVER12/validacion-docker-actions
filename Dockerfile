@@ -1,5 +1,8 @@
-FROM alpine:3.19
-RUN apk add --no-cache curl bash
+# ✅ VERSIÓN CORREGIDA
+FROM ubuntu:22.04          # ✅ Especifica versión
+RUN apt-get update && \    # ✅ Combina con clean
+    apt-get install -y curl && \
+    rm -rf /var/lib/apt/lists/*
+COPY . /app               # ✅ Usa COPY en lugar de ADD
 WORKDIR /app
-COPY . /app/
-CMD ["sh", "-c", "echo '✅ Validación exitosa!' && curl --version"]
+CMD ["sh", "-c", "echo 'Hola desde Ubuntu'"]  # ✅ Formato JSON correcto
