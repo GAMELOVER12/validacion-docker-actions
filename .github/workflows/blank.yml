@@ -1,0 +1,44 @@
+name: Validación de compilación Docker
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:
+
+jobs:
+  validar-y-construir:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Descargar código
+        uses: actions/checkout@v4
+
+      - name: ⚙️ Configurar Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: 🔍 Validar configuración de compilación
+        uses: docker/build-push-action@v6
+        with:
+          call: check
+          context: .
+          file: ./Dockerfile
+        continue-on-error: false
+
+      - name: 🏗️ Construir imagen Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          file: ./Dockerfile
+          push: false
+          load: true
+          tags: mi-app:validada
+
+      - name: 🧪 Probar imagen
+        run: |
+          docker run --rm mi-app:validada
+          echo "✅ Imagen construida y validada correctamente"
+
+      - name: ✅ Validación completada
+        run: echo "🎉 Todas las validaciones pasaron exitosamente"
