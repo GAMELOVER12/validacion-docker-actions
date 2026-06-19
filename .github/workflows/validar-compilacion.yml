@@ -18,15 +18,14 @@ jobs:
       - name: ⚙️ Configurar Docker Buildx
         uses: docker/setup-buildx-action@v3
 
-      - name: 🔍 Validar configuración de compilación
+      - name: 🔍 Validar Dockerfile
         uses: docker/build-push-action@v6
         with:
           call: check
           context: .
           file: ./Dockerfile
-        continue-on-error: false
 
-      - name: 🏗️ Construir imagen Docker
+      - name: 🏗️ Construir imagen
         uses: docker/build-push-action@v6
         with:
           context: .
@@ -38,7 +37,7 @@ jobs:
       - name: 🧪 Probar imagen
         run: |
           docker run --rm mi-app:validada
-          echo "✅ Imagen construida y validada correctamente"
+          echo "✅ Validación exitosa"
 
-      - name: ✅ Validación completada
-        run: echo "🎉 Todas las validaciones pasaron exitosamente"
+      - name: ✅ Completado
+        run: echo "🎉 Todas las validaciones pasaron"
