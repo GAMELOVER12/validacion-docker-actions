@@ -1,8 +1,12 @@
-# ✅ VERSIÓN CORREGIDA
-FROM ubuntu:22.04          # ✅ Especifica versión
-RUN apt-get update && \    # ✅ Combina con clean
-    apt-get install -y curl && \
-    rm -rf /var/lib/apt/lists/*
-COPY . /app               # ✅ Usa COPY en lugar de ADD
+# Dockerfile
+FROM python:3.11-slim AS builder
 WORKDIR /app
-CMD ["sh", "-c", "echo 'Hola desde Ubuntu'"]  # ✅ Formato JSON correcto
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+FROM python:3.11-slim
+WORKDIR /app
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY src/ .
+EXPOSE 5000
+CMD ["python", "app.py"]
