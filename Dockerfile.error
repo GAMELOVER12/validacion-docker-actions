@@ -1,6 +1,0 @@
-# DOCKERFILE CON ERRORES - Para probar validación
-FROM ubuntu
-RUN apt-get update
-ADD . /app
-WORKDIR /app
-CMD echo "Hola"
