@@ -1,0 +1,22 @@
+name: Build and Push Docker Image (Modo Experto)
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v6
+
+      - name: Docker Login Manual
+        run: echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login -u thelastwolfstanding --password-stdin
+
+      - name: Build Docker image
+        run: docker build -t thelastwolfstanding/mi-app:latest .
+
+      - name: Push Docker image
+        run: docker push thelastwolfstanding/mi-app:latest
