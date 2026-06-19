@@ -5,5 +5,5 @@ group "default" {
 target "build" {
   context = "."
   dockerfile = "Dockerfile"
-  tags = ["thelastwolfstanding/mi-app:latest"]
+  tags = ["wearygamelov1/mi-app:latest"]
 }
