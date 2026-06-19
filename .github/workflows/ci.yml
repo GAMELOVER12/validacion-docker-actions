@@ -10,33 +10,43 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v6
+        uses: actions/checkout@v4
 
       # ==========================================
-      # LOGIN CORREGIDO (usando comando directo)
+      # LOGIN A DOCKER HUB (CORREGIDO)
       # ==========================================
       - name: Login to Docker Hub
-        run: echo "${{ secrets.DOCKER_TOKEN }}" | docker login -u thelastwolfstanding --password-stdin
+        uses: docker/login-action@v3
+        with:
+          username: wearygamelov1
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
+      # ==========================================
+      # CONFIGURAR DOCKER BUILDX
+      # ==========================================
       - name: Set up Docker Buildx
-        uses: docker/setup-buildx-action@v4
+        uses: docker/setup-buildx-action@v3
 
       # ==========================================
       # 1. VALIDACIÓN CON docker/build (call: check)
       # ==========================================
       - name: Validate build configuration
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@v6
         with:
           call: check
+          context: .
+          file: ./Dockerfile
 
       # ==========================================
       # 2. CONSTRUCCIÓN Y PUSH CON docker/build
       # ==========================================
       - name: Build and push
-        uses: docker/build-push-action@v7
+        uses: docker/build-push-action@v6
         with:
           push: true
-          tags: thelastwolfstanding/mi-app:latest
+          tags: wearygamelov1/mi-app:latest
+          context: .
+          file: ./Dockerfile
 
       # ==========================================
       # 3. VALIDACIÓN CON BAKE (docker/bake-action)
