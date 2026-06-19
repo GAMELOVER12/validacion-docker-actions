@@ -1,27 +1,9 @@
-// docker-bake.hcl
 group "default" {
-  targets = ["app-dev", "app-prod"]
+  targets = ["build"]
 }
 
-target "app-base" {
+target "build" {
+  context = "."
   dockerfile = "Dockerfile"
-  contexts = {
-    src = "./src"
-  }
-}
-
-target "app-dev" {
-  inherits = ["app-base"]
-  tags = ["myapp:dev"]
-  args = {
-    ENVIRONMENT = "development"
-  }
-}
-
-target "app-prod" {
-  inherits = ["app-base"]
-  tags = ["myapp:prod"]
-  args = {
-    ENVIRONMENT = "production"
-  }
+  tags = ["thelastwolfstanding/mi-app:latest"]
 }
